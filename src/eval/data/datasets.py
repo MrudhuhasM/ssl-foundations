@@ -12,6 +12,9 @@ def get_dataset(name):
     elif name == 'cifar100':
         train_dataset = datasets.CIFAR100(root='./data', train=True, download=True, transform=transform)
         test_dataset = datasets.CIFAR100(root='./data', train=False, download=True, transform=transform)
+    elif name == 'stl10':
+        train_dataset = datasets.STL10(root='./data', split='train', download=True, transform=transform)
+        test_dataset = datasets.STL10(root='./data', split='test', download=True, transform=transform)
     else:
         raise ValueError(f"Dataset {name} not supported.")
     return train_dataset, test_dataset

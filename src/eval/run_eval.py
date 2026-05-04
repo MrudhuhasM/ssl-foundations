@@ -11,9 +11,12 @@ def main():
     train_dataset, test_dataset = get_dataset('cifar10')
 
     # Evaluate using linear probe
-    linear_probe_accuracy = linear_probe(encoder, train_dataset, test_dataset)
-    print(f"Linear Probe Accuracy: {linear_probe_accuracy:.4f}")
+    linear_probe_accuracy, learning_rate = linear_probe(encoder, train_dataset, test_dataset)
+    print(f"Linear Probe Accuracy: {linear_probe_accuracy:.4f} with learning rate: {learning_rate}")    
 
     # Evaluate using k-NN
     knn_accuracy = knn_evaluate(encoder, train_dataset, test_dataset)
     print(f"k-NN Accuracy: {knn_accuracy:.4f}")
+
+if __name__ == "__main__":
+    main()

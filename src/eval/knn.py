@@ -1,19 +1,6 @@
 import torch
 from torch.nn import functional as F
-
-
-def extract_features(model, dataloader, device):
-    model.eval()
-    features_list = []
-    labels_list = []
-    with torch.no_grad():
-        for images, labels in dataloader:
-            images = images.to(device)
-            labels = labels.to(device)
-            features = model(images)
-            features_list.append(features)
-            labels_list.append(labels)
-    return torch.cat(features_list), torch.cat(labels_list)
+from eval.utils import extract_features
 
 @torch.inference_mode()
 def knn_evaluate(model, train_dataset, test_dataset, k=200, batch_size=64, temperature=0.07):
@@ -50,7 +37,7 @@ def knn_evaluate(model, train_dataset, test_dataset, k=200, batch_size=64, tempe
     train_labels_neighbors = train_labels[indices]
 
     weights = F.softmax(similarities / temperature, dim=1)
-    one_hot_labels = F.one_hot(train_labels_neighbors, num_classes=num_classes)
+    one_hot_labels = F.one_hot(train_labels_neighbors, num_classes=num_classes).float()
     weighted_votes = weights.unsqueeze(2) * one_hot_labels
     class_scores = weighted_votes.sum(dim=1)
     predicted_labels = class_scores.argmax(dim=1)
